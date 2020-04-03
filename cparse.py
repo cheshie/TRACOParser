@@ -1,7 +1,5 @@
 from argparse import ArgumentParser
 from collections import namedtuple, deque
-
-# Parse command line arguments
 from re import search, compile
 import re
 
@@ -17,7 +15,7 @@ def parse_arguments(args_parser = ArgumentParser(prog='PLUTO / TRACO Code Parser
 class Constructions():
     def __init__(self, name):
         if name == 'for':                # tuple name cannot be known python keyword!
-            self.Constr    = namedtuple('for_n', ['init', 'end_condition', 'increment', 'instruction'])
+            self.Constr    = namedtuple('for_n', ['init', 'end_condition', 'increment', 'instruction', 'original_line']) # last parameter is just a string representing orig. line
                                                                             # TODO: parallel for's should be special-marked!
             # TODO: Special case: what if incrementation is outside???
             self.method    = self.eval_for
@@ -27,12 +25,15 @@ class Constructions():
         if name =='variable':
             self.Constr = namedtuple('var', ['name', 'value', 'size', 'type'])
     #
-
+    # {} <= in the future, how to recognize it
     def eval_for(self, instruction):
         # TODO: For special cases - not handled yet!
         self.Constr.init, self.Constr.end_condition, self.Constr.increment = \
             search(r'.*?\((.*)\).*', instruction).group(1).split(';')
-        # Case 1: for (init ; end_condition ; increment ) => handled
+        # i = n; i >= 0; i--
+        # i = 0; i <= n; i++
+        # Case 1: for (init ; end_condition ; increment ) => handled ONLY THIS CASE IS INTERESTING
+        # Always will be i++, never ++i
         # Case 2: for ( ; ; ) => not handled
         # Case 3: for (init; end_condition; ) => not handled
         # Case 4: for (;end_condition; increment) => not handled
@@ -51,7 +52,7 @@ class Parser():
     def __init__(self, input):
         self.in_fname   = input #CHANGE THIS NAME - python keyword
         self.f_contents = None
-        self.file_structure = {'include': None, 'variables': None, 'instructions' : None}
+        self.file_structure = {'include': None, 'variables': None, 'instructions' : []}
         self.keywords       = {'for', 'pragma'}
     #
 
@@ -71,7 +72,7 @@ class Parser():
                 if instruction in self.keywords:
                     # Create object containing code in the line
                     ins_struct = Constructions(instruction)
-                    self.file_structure['instructions'] = ins_struct
+                    self.file_structure['instructions'] = ins_struct #list of instructions
                     self.file_structure['instructions'].method(line.replace(instruction, ''))
                 else:
                     # Assign variable here
