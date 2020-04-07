@@ -1,11 +1,17 @@
+import os
 import logging
 from pathlib import Path
 
 logger = logging.getLogger(__name__)
 
 _ext = '.cu'
-lib_folder = Path("libs/")
-prod_folder = Path("Products/")
+
+lib_folder = os.getcwd()+'/libs'
+if not os.path.exists(lib_folder):
+    os.makedirs(lib_folder)
+prod_folder = os.getcwd()+'/Products'
+if not os.path.exists(prod_folder):
+    os.makedirs(prod_folder)
 
 constFiles = {
     0: 'LIBRARIES',
