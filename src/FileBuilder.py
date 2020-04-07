@@ -24,7 +24,7 @@ constFiles = {
 resources = {}
 
 for i in constFiles.values():
-    with open('{0}/{1}.txt'.format(lib_folder, i), 'r') as f:
+    with open('{0}/{1}.txt'.format(lib_folder, i.lower()), 'r') as f:
         resources[i] = f.read().splitlines()
 
 libraries = resources[constFiles[0]]
