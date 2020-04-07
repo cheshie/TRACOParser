@@ -64,7 +64,6 @@ class Parser():
                 if inside_for:
                     # If its a single-line for (w/o '{}'), then pop it
                     if inside_for[-1]['is_multiline'] is False and self.instr_nr - inside_for[-1]['line'] > 1:
-                        print("Popping")
                         inside_for.pop()
 
                 # Check if its in keywords
@@ -100,8 +99,6 @@ class Parser():
                     if instruction == 'for':
                         inside_for.append({'line' : self.instr_nr, 'is_multiline' : False, 'addr' : ins_struct})
 
-                    print("Current for: ", inside_for)
-
                 # Current instruction is not in keywords
                 # Meaning its i.e. variable operation
                 else:
@@ -125,7 +122,6 @@ class Parser():
                         if inside_for:
                             # If inside_for contains information about any for, assign next instruction
                             # To that for's list of instructions
-                            print("last for: ", inside_for[-1])
                             inside_for[-1]['addr'].Constr.instructions.append(
                                 assign_dict)
                         else:
@@ -135,6 +131,8 @@ class Parser():
 
                 # Move to the next instruction in source file
                 self.instr_nr += 1
+
+        return self.file_structure
     #
 
     # To print class into a readable format
