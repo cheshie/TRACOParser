@@ -1,0 +1,6 @@
+MyKernel
+main
+cudaMalloc
+cudaMemcpy
+cudaMemcpyHostToDevice
+cudaMemcpyDeviceToHost
