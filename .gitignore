@@ -132,4 +132,7 @@ pip-selfcheck.json
 ### Created files ###
 main.cu
 
+### Logger files ###
+*.log
+
 # End of https://www.gitignore.io/api/venv,python
