@@ -1,5 +1,7 @@
-from src import logger
+import logging
 from pathlib import Path
+
+logger = logging.getLogger(__name__)
 
 _ext = '.cu'
 lib_folder = Path("libs/")
