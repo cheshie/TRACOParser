@@ -1,0 +1,15 @@
+N
+arrtype
+row
+col
+h
+w
+j
+d_A
+blockIdx
+blockDim
+threadIdx
+rows
+cols
+dA
+A

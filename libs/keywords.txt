@@ -1,0 +1,6 @@
+#define
+typedef
+return
+__global__
+void
+sizeof
