@@ -1,7 +1,7 @@
 from Parser import Parser
 from argparse import ArgumentParser
 from pprint import pprint
-from Constructions import Constructions
+from .Constructions import Constructions
 
 def parse_arguments(args_parser = ArgumentParser(prog='PLUTO / TRACO Code Parser',
                                                  description='Parsing code from P/T to CUDA')):
