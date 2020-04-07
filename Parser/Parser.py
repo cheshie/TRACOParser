@@ -1,7 +1,7 @@
 from collections import namedtuple, deque
 from re import search, compile
 import re
-from Constructions import Constructions
+from .Constructions import Constructions
 
 class Parser():
     def __init__(self, inpt):
@@ -31,7 +31,7 @@ class Parser():
             inside_for   = deque()
 
             # How many instructions after keyword "pragma" should be marked as parallel:
-            pragma_depth = 2
+            pragma_depth = 1 # Pragma only for 1st for
             # Just to indicate for that particular instruction whether to mark it or not
             is_parallel  = False
 
