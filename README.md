@@ -36,9 +36,11 @@ So far, so good. Finally, the *test_parser()* function just iterates over the li
 In the example, first parsed instruction is **pragma** which sets first spotted 'FOR' as parallel. Next line, we have Constructions object. We see the flag *is_parallel* set to true, and a list of instructions which contains another 'FOR'. We get inside its instructions field and print out another 'FOR' specifics and instructions list, which in turn has Python dict as only element (variable assignment). 
 
 We'll skip example2.c and run the last example: 
+
 ![Example 3](https://github.com/PrzemyslawSamsel/TRACOParser/tree/master/img/Example_1_TRACO.png)
 
 The output from this example is as follows: 
+
 ![Example 3 Output](https://github.com/PrzemyslawSamsel/TRACOParser/tree/master/img/Example_1_OUT.png)
 
 This example contains a multiline 'FOR' which is defined using curly '{}' brackets. Reading the instructions, first one is **pragma**. After that, we find first 'FOR' which has also some instructions inside, first of which is variable assignment (dict), and the other one is another 'FOR' (Constructions object).  As we access the other FOR's instructions list, we see there is another assignment. 
