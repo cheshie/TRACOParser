@@ -7,7 +7,7 @@ from argparse import ArgumentParser
 
 def parse_arguments(args_parser = ArgumentParser(prog='PLUTO / TRACO Code Parser',
                                                  description='Parsing code from P/T to CUDA')):
-    args_parser.add_argument('-i', '--infile', help='input file name', default='Examples/example2.c')
+    args_parser.add_argument('-i', '--infile', help='input file name', default='Examples/example1.c')
     args_parser.add_argument('-o', help='output file')
 
     return args_parser.parse_args()
@@ -29,9 +29,11 @@ def test_parser(parser=Parser(parse_arguments().infile)):
         else:
             print(x)
 
-if __name__ == "__main__":
-    file_name = "Examples/example1.c"
-    # readfile() returns a dict('variables', 'instructions')
-    parsing_phrases = Parser(file_name).readfile()
-    filename = 'main'
-    FileBuilder(parsing_phrases, filename)
+test_parser()
+
+# if __name__ == "__main__":
+#     file_name = "Examples/example1.c"
+#     # readfile() returns a dict('variables', 'instructions')
+#     parsing_phrases = Parser(file_name).readfile()
+#     filename = 'main'
+#     FileBuilder(parsing_phrases, filename)

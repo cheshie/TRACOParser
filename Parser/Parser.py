@@ -19,8 +19,9 @@ class Parser():
     def readfile(self):
         with open(self.in_fname, 'r') as lines:
             # Read contents of the file
-            self.f_contents = deque(lines) # LEAVE 1st LINE (pragma) for now!
-            # This deque will just hold dicts with keys:
+            self.f_contents = deque(lines)
+
+            # This deque (inside_for) will just hold dicts with keys:
             # line         => nr of line where for started
             # is_multiline => if '{' spotted, mark this for as multiline
             # addr         => address to Construction that holds information about current for
@@ -31,7 +32,7 @@ class Parser():
             inside_for   = deque()
 
             # How many instructions after keyword "pragma" should be marked as parallel:
-            pragma_depth = 1 # Pragma only for 1st for
+            pragma_depth = 1 # Pragma counts only for 1st for
             # Just to indicate for that particular instruction whether to mark it or not
             is_parallel  = False
 
