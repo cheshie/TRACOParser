@@ -16,7 +16,7 @@ python main.py -i Examples/example1.c
 
 For the reference, file example1.c looks as follows: 
 
-[Example 1]: https://github.com/PrzemyslawSamsel/TRACOParser/blob/master/img/Example_1_TRACO.png
+![Example 1](https://github.com/PrzemyslawSamsel/TRACOParser/blob/master/img/Example_1_TRACO.png)
 
 
 
