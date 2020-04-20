@@ -48,8 +48,21 @@ class FileBuilder:
         f.close()
         logger.info('Created file')
 
+    def check_variables_type(self):
+        logger.info("Checking the type of variables")
+        if self.phrase.variables:
+            for var in self.phrase.variables:
+                if type(self.phrase.variables[var]) is not dict:
+                    logger.warn('var: {} is {} type'.format(
+                        var, type(self.phrase.variables[var])))
+                if type(self.phrase.variables[var]) is dict:
+                    logger.warn('{} is matrix'.format(var))
+        else:
+            logger.warn('no variables')
+
     def building_file(self, file):
         logger.info('Started file building')
+        self.check_variables_type()
         definitionLib = "\n{0} {1}\n".format(libraries[0], libraries[1])
         file.writelines(definitionLib)
 
