@@ -60,11 +60,74 @@ class FileBuilder:
         else:
             logger.warn('no variables')
 
+    # building_for - function to create loop for
+    # variable - loop's variable
+    # condition - condition's variable
+    # start - init value
+    # step - step in loop
+    # stop - end value
+    # inside - loop body
+    def building_for(self, variable, condition, start, step, stop, inside=''):
+        return f"for({variable} = {start}; {variable} {condition} {stop}; {variable} += {variable} + {step}) {{ \n\t{inside} }}"
+
+    # declaration_variable_with_value - function to create variable with value
+    # type - variable type
+    # name - variable name
+    # value - init value
+    def declaration_variable_with_value(self, type, name, value):
+        return f"{type} {name} = {value}"
+
+    # declaration_variable - function to create variable
+    # type - variable type
+    # name - variable name
+    def declaration_variable(self, type, name):
+        return f"{type} {name}"
+
+    # creating_function - function to create function
+    # returnType - return variable type
+    # name - function name
+    # typedef - definition typedef
+    # param - parameters taken by the function
+    def creating_function(self, returnType, name, typedef='', param=''):
+        return f"{typedef} {returnType} {name}({param}) {{ }}"
+
+    # creating_two_dimensional_array - function to create two dimensional array
+    # type - array type
+    # name - array name
+    # first_dim - first dimension of the array
+    # second_dim - second dimension of the array
+    def creating_two_dimensional_array(self, type, name, first_dim, second_dim):
+        return f"{type} {name}[{first_dim}][{second_dim}]"
+
+    # creating_one_dimensional_array - function to create array
+    # type - array type
+    # name - array name
+    # first_dim - first dimension of the array
+    # typedef - definition typedef
+    def creating_one_dimensional_array(self, type, name, first_dim, typedef=''):
+        return f"{typedef} {type} {name}[{first_dim}]"
+
+    # lt_or_gt - function for determining the sign "less than" or "greater than"
+    # type - variable type
+    # name - variable name
+    def lt_or_gt(self, startValue, endValue):
+        if startValue < endValue:
+            return '<'
+        else:
+            return '>'
+
     def building_file(self, file):
         logger.info('Started file building')
         self.check_variables_type()
         definitionLib = "\n{0} {1}\n".format(libraries[0], libraries[1])
         file.writelines(definitionLib)
+
+        #
+        # file.writelines(self.building_for('x', '<=', 1, 2, 10, self.building_for('y', '<', 1, 2, 10)))
+        # file.writelines(self.declaration_variable_with_value('int', 'N', 8) + ";\n")
+        # file.writelines(self.declaration_variable('int', 'N') + ";\n")
+        # file.writelines(self.creating_function('void', 'main', '__global__', self.declaration_variable('arrtype', '*dA')) + ";\n")
+        file.writelines(self.creating_two_dimensional_array('int', 'd_A','N', 'N') + ";\n")
 
         definitionConst = "\n{0} {1} {2} \n\n".format(
             keyWords[0], variables[0], values[0])
