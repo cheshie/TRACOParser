@@ -89,7 +89,7 @@ class FileBuilder:
     # typedef - definition typedef
     # param - parameters taken by the function
     def creating_function(self, returnType, name, typedef='', param=''):
-        return f"{typedef} {returnType} {name}({param}) {{ }}"
+        return f"{typedef} {returnType} {name}({param}) {{ "
 
     # creating_two_dimensional_array - function to create two dimensional array
     # type - array type
@@ -127,7 +127,7 @@ class FileBuilder:
         # file.writelines(self.declaration_variable_with_value('int', 'N', 8) + ";\n")
         # file.writelines(self.declaration_variable('int', 'N') + ";\n")
         # file.writelines(self.creating_function('void', 'main', '__global__', self.declaration_variable('arrtype', '*dA')) + ";\n")
-        file.writelines(self.creating_two_dimensional_array('int', 'd_A','N', 'N') + ";\n")
+        # file.writelines(self.creating_two_dimensional_array('int', 'd_A','N', 'N') + ";\n")
 
         definitionConst = "\n{0} {1} {2} \n\n".format(
             keyWords[0], variables[0], values[0])
@@ -135,9 +135,8 @@ class FileBuilder:
 
         file.writelines(namespaces)
 
-        definitionVariable1 = "\n{0} {1} {2}[{3}]; \n\n".format(
-            keyWords[1], typesVariables[0], variables[1], variables[0])
-        file.writelines(definitionVariable1)
+        # typedef int arrtype[N];
+        file.writelines("\n" + self.creating_one_dimensional_array(typesVariables[0], variables[1], variables[0], keyWords[1]) + ";\n")
 
         myKernelFunc = "\n{0} {1} {2}({3} {4}[{5}][{6}]){{\n\n".format(
             keyWords[3], keyWords[4], functions[0], typesVariables[0], variables[7], variables[0], variables[0])
@@ -158,29 +157,27 @@ class FileBuilder:
             variables[6], values[2], variables[0], variables[0], variables[10], values[1])
         file.writelines(myKernelFor)
 
-        mainFunc = "\n\n{0} {1}(){{\n\n".format(
-            typesVariables[0], functions[1])
-        file.writelines(mainFunc)
+        # int main() {
+        file.writelines("\n\n" + self.creating_function(typesVariables[0], functions[1], '', '') + "\n")
 
-        mainBody1 = "\t{0} {1} = {2}.y * {3}.y + {4}.y; \n\t{5} {6} = {7}.x * {8}.x + {9}.x; \n\n".format(
-            typesVariables[0], variables[2], variables[8], variables[9], variables[10], typesVariables[0], variables[3], variables[8], variables[9], variables[10])
-        file.writelines(myKernelBody1)
+        # int rows = N;
+        # int cols = N;
+        # arrtype *dA;
+        file.writelines("\t" + self.declaration_variable_with_value(typesVariables[0], variables[11], variables[0]) + ";\n")
+        file.writelines("\t" + self.declaration_variable_with_value(typesVariables[0], variables[12], variables[0]) + ";\n")
+        file.writelines("\t" + self.declaration_variable(variables[1], '*d') + ";\n")
 
-        mainBody2 = "\t{0} {1} = {2};\n\t{0} {3} = {2};\n\t{4} *{5};\n\n\t".format(
-            typesVariables[0], variables[11], variables[0], variables[12], variables[1], variables[13])
-        file.writelines(mainBody2)
+        # int** A = new int*[rows];
+        file.writelines("\t" + self.declaration_variable_with_value(typesVariables[2], variables[14], self.creating_one_dimensional_array('new', typesVariables[2], variables[11])) + ";\n")
 
-        mainBody3 = "{0}** {1} = new {0}*[{2}];\n\t{1}[0] = new {0}[{2}*{3}];\n\n\t".format(
-            typesVariables[0], variables[14], variables[11], variables[12])
-        file.writelines(mainBody3)
+        # A[0] = new int[rows * cols];
+        file.writelines("  " + self.creating_one_dimensional_array('', variables[14], 0) + "=" + self.creating_one_dimensional_array('new', typesVariables[0], 'rows*cols') + ";\n")
 
-        mainFor1 = "for({0} i = 1; i < {1}; ++i){{\n\t\t{2}[i] = {2}[i-1] + {3};\n\n\t".format(
-            typesVariables[0], variables[11], variables[14], variables[12])
-        file.writelines(mainFor1)
+        # for (int i = 1; i < rows; ++i) { A[i] = A[i-1] + cols; };
+        file.writelines("\n\t" + self.building_for('i', self.lt_or_gt(1, 10), 1, 1, variables[11], self.creating_one_dimensional_array('', variables[14], 0) + "=" + self.creating_one_dimensional_array('', variables[14],'i-1') + " + cols;\n\t") + ";\n")
 
-        mainFor2 = "for({0} i = 0; i < {1}; ++i){{\n\t\tfor({0} j = 0; j < {3}; ++j){{\n\t\t{2}[i][j] = i*{3}+j;\n\t\t}}\n\t}}\n\n".format(
-            typesVariables[0], variables[11], variables[14], variables[12])
-        file.writelines(mainFor2)
+        # for (int i = 0; i < rows; ++i) { for (int j = 0; j < cols; ++j) { A[i][j] = i*cols+j; }; };
+        file.writelines("\n\t" + self.building_for('x', self.lt_or_gt(1, 10), 1, 2, 10, self.building_for('y', '<', 1, 2, 10, self.creating_two_dimensional_array('', 'A','N', 'N') + "= i*cols+j;\n\t") + ";\n\t") + ";\n")
 
         mainCudaFunc1 = "\t{0}(({1}**)&{2}, sizint) * {3}* {4});\n".format(
             functions[2], keyWords[4], variables[13], variables[11], variables[12])
