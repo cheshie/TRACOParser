@@ -40,7 +40,7 @@ class FileBuilder:
     def __init__(self, phrase, filename):
         logger.info('Initialized FileBuilder')
         self.phrase = phrase
-        self.file = self.make_file(filename)
+        self.make_file(filename)
 
     def make_file(self, filename):
         f = open('{0}/{1}{2}'.format(prod_folder, filename, _ext), 'w+')
