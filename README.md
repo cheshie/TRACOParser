@@ -44,11 +44,11 @@ In the example, first parsed instruction is **pragma** which sets first spotted 
 
 We'll skip example2.c and run the last example: 
 
-![Example 3](https://github.com/PrzemyslawSamsel/TRACOParser/blob/master/img/Example_1_TRACO.png)
+![Example 3](https://github.com/PrzemyslawSamsel/TRACOParser/blob/master/img/Example_3_TRACO.png)
 
 The output from this example is as follows: 
 
-![Example 3 Output](https://github.com/PrzemyslawSamsel/TRACOParser/blob/master/img/Example_1_OUT.png)
+![Example 3 Output](https://github.com/PrzemyslawSamsel/TRACOParser/blob/master/img/Example_3_OUT.png)
 
 
 This example contains a multiline 'FOR' which is defined using curly '{}' brackets. Reading the instructions, first one is **pragma**. After that, we find first 'FOR' which has also some instructions inside, first of which is variable assignment (dict), and the other one is another 'FOR' (Constructions object).  As we access the other FOR's instructions list, we see there is another assignment. 
