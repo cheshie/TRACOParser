@@ -87,7 +87,7 @@ class Constructions():
                           instructions= [],
                           original_line= instruction,
                           is_parallel  = is_parallel,
-                          variables = dict())
+                          variables =dict())
     #
 
     def eval_pragma(self, instruction):
