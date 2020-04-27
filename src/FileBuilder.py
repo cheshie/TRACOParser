@@ -1,6 +1,7 @@
 import os
 import json
 import logging
+from Parser.Constructions import Constructions
 
 logger = logging.getLogger(__name__)
 
@@ -160,6 +161,25 @@ class FileBuilder:
         self.file.writelines("  " + self.creating_one_dimensional_array(
             '', variables[14], 0) + "=" + self.creating_one_dimensional_array('new', typesVariables[0], 'rows*cols') + ";\n")
 
+        # for instr in self.phrase.instructions:
+        #     if isinstance(instr, Constructions):
+        #         print(instr.Constr)
+        #         # for building
+        #         for instr2 in instr.Constr.instructions:
+        #             if isinstance(instr2, Constructions):
+        #                 print(instr2.Constr)
+        #                 for instr3 in instr2.Constr.instructions:
+        #                     if isinstance(instr3, Constructions):
+        #                         pass
+        #                     else:
+        #                         print(instr3)
+        #                         print("No to kończymy")
+        for a in self.phrase.instructions:
+            while isinstance(a, Constructions):  # or hasattr(a, 'Constr'):
+                print(dir(a.Constr))
+                a = a.Constr.instructions[0]
+            print(a)
+
         # for (int i = 1; i < rows; ++i) { A[i] = A[i-1] + cols; };
         self.file.writelines("\n\t" + self.building_for('i', self.lt_or_gt(1, 10), 1, 1, variables[11], self.creating_one_dimensional_array(
             '', variables[14], 0) + "=" + self.creating_one_dimensional_array('', variables[14], 'i-1') + " + cols;\n\t") + ";\n")
@@ -219,11 +239,21 @@ class FileBuilder:
         self.file.writelines('\n')
 
     def building_kernel(self):
+        # MyKernel function is only one and have 0 index in libs
+        # main function have 1 index in libs
+        # mykernel other functions have indexes 1<10
+        # other functions have indexes 10<
+
+        # TODO: is Kernel func always global?
+
         myKernelFunc = "\n{0} {1} {2}({3} {4}[{5}][{6}]){{\n\n".format(
             keyWords[3], keyWords[4], functions[0], typesVariables[0], variables[7], variables[0], variables[0])
         self.file.writelines(myKernelFunc)
+
         myKernelBody1 = "\t{0} {1} = {2}.y * {3}.y + {4}.y; \n\t{5} {6} = {7}.x * {8}.x + {9}.x; \n\n".format(
-            typesVariables[0], variables[2], variables[8], variables[9], variables[10], typesVariables[0], variables[3], variables[8], variables[9], variables[10])
+            typesVariables[0], variables[2], variables[8], variables[9], variables[10],
+            typesVariables[0], variables[3], variables[8], variables[9], variables[10])
+
         self.file.writelines(myKernelBody1)
 
         definitionVariable2 = "\t{0} {1} = {2};\n\t{3} {4} = {5};\n\t{6} {7};\n\t".format(
