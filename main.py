@@ -31,9 +31,9 @@ def test_parser(parser=Parser(parse_arguments().infile)):
 
 test_parser()
 
-# if __name__ == "__main__":
-#     file_name = "Examples/example1.c"
-#     # readfile() returns a dict('variables', 'instructions')
-#     parsing_phrases = Parser(file_name).readfile()
-#     filename = 'main'
-#     FileBuilder(parsing_phrases, filename)
+if __name__ == "__main__":
+    file_name = "Examples/example1.c"
+    # readfile() returns a dict('variables', 'instructions')
+    parsing_phrases = Parser(file_name).readfile()
+    filename = 'main'
+    FileBuilder(parsing_phrases, filename)
