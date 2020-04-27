@@ -13,10 +13,7 @@ class Constructions():
             self.Constr = namedtuple('var', ['name', 'value', 'size', 'type'])
 
     def eval_for(self, instruction, variables, is_parallel=False):
-        # TODO: parallel for's should be special-marked!
-        # TODO: Special case: what if incrementation is outside???
-        # Case 1: for (init ; end_condition ; increment ) => handled ONLY THIS CASE IS INTERESTING
-
+        # Case 1: for (init ; end_condition ; increment ) => handled (and only this is interesting)
         # Prototype of construction namedtuple
         For = namedtuple('for_n', ['init', 'end_condition', 'increment', 'instructions','variables', 'is_parallel', 'original_line'])
 

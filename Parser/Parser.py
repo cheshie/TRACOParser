@@ -40,6 +40,9 @@ class Parser():
             else:
                 self.file_structure.variables[vr] = vars[vr]
 
+        # Check permissions (R/W/RW) for every declared variable
+        self.evaluate_permissions()
+
         # Parsing source file contents
         with open(self.in_fname, 'r') as lines:
             # Read contents of the file
@@ -156,9 +159,31 @@ class Parser():
         return self.file_structure
     #
 
+    def evaluate_permissions(self):
+        # For every declared variable we check the file for the following cases:
+        #(1) i.e. A[i][j] = 5 => given variable name appears in source code only on left => mark variable as W (WRITE)
+        #(2) i.e. X = A[i][j] => given variable is on the right => mark as R (READ)
+        #(3) Both             => given variable is used on both sides => mark as RW(READ-WRITE)
+        with open(self.in_fname, 'r') as source:
+            lines = source.readlines()
+            for var_name in self.file_structure.variables.keys():
+                perms = ''
+                for c_line in lines:
+                    # Skip lines that will not for sure contain assignment
+                    if 'pragma' in c_line or 'for' in c_line:
+                        continue
+                    # Case (1)
+                    if search(rf'{var_name}(.*)=', c_line):
+                        perms += 'R'
+                    # Case (2)
+                    if search(rf'=(.*){var_name}', c_line):
+                        perms += 'W'
+                self.file_structure.variables[var_name][self.jf.perms] = perms
+    #
+
     # To print class into a readable format
     def __str__(self):
-        # ALL VARIABLES AND INSTRUCTIONS IN JSON FORMAT HER???
+        # All vars and instructions in json
         return "pass"
 #
 
