@@ -1,0 +1,18 @@
+{
+  "d_N": {
+    "value" : 5,
+    "dtype" : "int",
+    "permissions" : 0
+  },
+  "A":
+    {
+      "name"  : "d_A",
+      "dtype" : "int",
+      "size":
+      {
+        "nrows": "d_N",
+        "ncols": "d_N"
+      },
+      "permissions": 0
+    }
+}

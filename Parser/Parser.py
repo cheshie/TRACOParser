@@ -1,7 +1,9 @@
 from collections import namedtuple, deque
+from os.path import dirname, abspath, join
 from re import search, compile
 import re
 from .Constructions import Constructions
+from json import loads
 
 class Parser():
     def __init__(self, inpt):
@@ -14,9 +16,31 @@ class Parser():
         self.keywords       = {'for', 'pragma'}
         # Counter holds info about which line (- 1) is currently processed
         self.instr_nr = 0
+        # Holds relative path to file with declared variables
+        self.variables_json = join('libs', 'values.json')
+        # json fields names, to be in one place
+        self.jf    = namedtuple('fields', ['name', 'dtype', 'perms', 'size'])\
+            (name='name', dtype='dtype', perms='permissions', size='size')
     #
 
     def readfile(self):
+        # Reading variables from prepared file in libs folder: values.json
+        # For now, we declare two variables - N and array A
+        # There is a field 'name' for iterables - it is important for reading json, nothing else
+        # But I will leave it here because team 2 might have already used it somewhere)
+        vars = loads(open(join(dirname(dirname(abspath(__file__))), self.variables_json),'r').read())
+        for vr in vars.keys():
+            # Parsing iterable - only difference is that iterables will contain dictionary
+            # with key 'size' that contains their indices
+            if self.jf.size in vars[vr]:
+                self.file_structure.variables[vars[vr][self.jf.name]] = vars[vr]
+                self.file_structure.variables[vars[vr][self.jf.name]][self.jf.size] = \
+                    tuple(vars[vr][self.jf.size].values())
+            # Parsing non-iterable
+            else:
+                self.file_structure.variables[vr] = vars[vr]
+
+        # Parsing source file contents
         with open(self.in_fname, 'r') as lines:
             # Read contents of the file
             self.f_contents = deque(lines)
@@ -35,10 +59,6 @@ class Parser():
             pragma_depth = 1 # Pragma counts only for 1st for
             # Just to indicate for that particular instruction whether to mark it or not
             is_parallel  = False
-
-            # For now, just declare hardcoded N variable, but this must change!
-            self.file_structure.variables['N'] = 5
-            self.file_structure.variables['A'] = {'name' : 'A', 'size' : (5, 5)}
 
             for line in self.f_contents:
                 # Remove all trailing and leading whitespaces
