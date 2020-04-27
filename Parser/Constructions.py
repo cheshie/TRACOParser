@@ -49,7 +49,7 @@ class Constructions():
             if '=' in cond_sign:
                 end_cond_dict['value'] = variables[cond_val]
             else:
-                end_cond_dict['value'] = variables[cond_val] - 1
+                end_cond_dict['value'] = variables[cond_val]['value'] - 1
         # Case 2:
         else:
             if '=' in cond_sign:
