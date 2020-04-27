@@ -1,4 +1,5 @@
 import os
+import json
 import logging
 
 logger = logging.getLogger(__name__)
@@ -186,24 +187,32 @@ class FileBuilder:
         self.file.writelines(mainCudaFunc4)
 
     def building_headers(self):
-        definitionLib = "\n{0} {1}\n".format(libraries[0], libraries[1])
-        self.file.writelines(definitionLib)
-
-        # file.writelines(self.building_for('x', '<=', 1, 2, 10, self.building_for('y', '<', 1, 2, 10)))
-        # file.writelines(self.declaration_variable_with_value('int', 'N', 8) + ";\n")
-        # file.writelines(self.declaration_variable('int', 'N') + ";\n")
-        # file.writelines(self.creating_function('void', 'main', '__global__', self.declaration_variable('arrtype', '*dA')) + ";\n")
-        # file.writelines(self.creating_two_dimensional_array('int', 'd_A','N', 'N') + ";\n")
-
-        definitionConst = "\n{0} {1} {2} \n\n".format(
-            keyWords[0], variables[0], values[0])
-        self.file.writelines(definitionConst)
-
-        self.file.writelines(namespaces)
+        absolute_json_file_path = 'libs/values.json'
+        with open(absolute_json_file_path, 'r') as f:
+            distros_dict = json.load(f)
+        
+        for i, lib in enumerate(libraries):
+            if libraries and i != 0 : self.file.writelines("{0} {1}\n".format(libraries[0], lib))
+        self.file.writelines('\n')
+        
+        if distros_dict:
+            for dist in distros_dict:
+                if 'value' in distros_dict[dist] : self.file.writelines("{0} {1} {2}\n".format(keyWords[0], dist, distros_dict[dist]['value']))
+                # if 'size' in distros_dict[dist] : 
+                #     self.file.write("{0} {1}".format(keyWords[0], dist))
+                #     for elem in distros_dict[dist]['size']: 
+                #         self.file.write("[{0}]".format(distros_dict[dist]['size'][elem]))
+            self.file.writelines('\n')
+        
+        for i, nmsp in enumerate(namespaces):
+            if namespaces and i != 0 : self.file.writelines("{0} {1};\n".format(namespaces[0], nmsp))
+        self.file.writelines('\n')
 
         # typedef int arrtype[N];
-        self.file.writelines("\n" + self.creating_one_dimensional_array(
-            typesVariables[0], variables[1], variables[0], keyWords[1]) + ";\n")
+        # TODO: review that in future
+        self.file.writelines(self.creating_one_dimensional_array(
+            typesVariables[0], variables[1], variables[0], keyWords[1]) + ";")
+        self.file.writelines('\n')
 
     def building_kernel(self):
         myKernelFunc = "\n{0} {1} {2}({3} {4}[{5}][{6}]){{\n\n".format(
