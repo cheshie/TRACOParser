@@ -84,7 +84,7 @@ class FileBuilder:
     # inside - loop body
     def building_for(self, variable, condition, start, step, stop, inside=''):
         logger.info("Building for")
-        return f"for({variable} = {start}; {variable} {condition} {stop}; {variable} += {variable} + {step}) {{ \n\t{inside} }}"
+        return f"for({variable} = {start}; {variable} {condition} {stop}; {variable} = {variable} + {step}) {{ \n\t{inside} }}"
 
     # declaration_variable_with_value - function to create variable with value
     # type - variable type
@@ -161,24 +161,24 @@ class FileBuilder:
         self.file.writelines("  " + self.creating_one_dimensional_array(
             '', variables[14], 0) + "=" + self.creating_one_dimensional_array('new', typesVariables[0], 'rows*cols') + ";\n")
 
-        # for instr in self.phrase.instructions:
-        #     if isinstance(instr, Constructions):
-        #         print(instr.Constr)
-        #         # for building
-        #         for instr2 in instr.Constr.instructions:
-        #             if isinstance(instr2, Constructions):
-        #                 print(instr2.Constr)
-        #                 for instr3 in instr2.Constr.instructions:
-        #                     if isinstance(instr3, Constructions):
-        #                         pass
-        #                     else:
-        #                         print(instr3)
-        #                         print("No to kończymy")
-        for a in self.phrase.instructions:
-            while isinstance(a, Constructions):  # or hasattr(a, 'Constr'):
-                print(dir(a.Constr))
-                a = a.Constr.instructions[0]
-            print(a)
+        for instr in self.phrase.instructions:
+            if isinstance(instr, Constructions):
+                for instr2 in instr.Constr.instructions:
+                    if isinstance(instr2, Constructions):
+                        for instr3 in instr2.Constr.instructions:
+                            if isinstance(instr3, Constructions):
+                                pass
+                            else:
+                                print(self.building_for(instr.Constr.init['name'], self.lt_or_gt(instr.Constr.init['value'], instr.Constr.end_condition['value']), instr.Constr.init['value'],
+                                                        instr.Constr.increment['inc'], instr.Constr.end_condition['value'],
+                                                        self.building_for(instr2.Constr.init['name'], self.lt_or_gt(instr2.Constr.init['value'], instr2.Constr.end_condition['value']),
+                                                                          instr2.Constr.init['value'], instr2.Constr.increment['inc'], instr2.Constr.end_condition['value'],
+                                                                          self.creating_two_dimensional_array('', instr3['var'], 'N', 'N') + "=" + instr3['val'] + ";\n\t")))
+        # for a in self.phrase.instructions:
+        #     while isinstance(a, Constructions):  # or hasattr(a, 'Constr'):
+        #         print(dir(a.Constr))
+        #         a = a.Constr.instructions[0]
+        #     print(a)
 
         # for (int i = 1; i < rows; ++i) { A[i] = A[i-1] + cols; };
         self.file.writelines("\n\t" + self.building_for('i', self.lt_or_gt(1, 10), 1, 1, variables[11], self.creating_one_dimensional_array(
