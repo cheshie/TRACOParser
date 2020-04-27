@@ -190,22 +190,26 @@ class FileBuilder:
         absolute_json_file_path = 'libs/values.json'
         with open(absolute_json_file_path, 'r') as f:
             distros_dict = json.load(f)
-        
+
         for i, lib in enumerate(libraries):
-            if libraries and i != 0 : self.file.writelines("{0} {1}\n".format(libraries[0], lib))
+            if libraries and i != 0:
+                self.file.writelines("{0} {1}\n".format(libraries[0], lib))
         self.file.writelines('\n')
-        
+
         if distros_dict:
             for dist in distros_dict:
-                if 'value' in distros_dict[dist] : self.file.writelines("{0} {1} {2}\n".format(keyWords[0], dist, distros_dict[dist]['value']))
-                # if 'size' in distros_dict[dist] : 
+                if 'value' in distros_dict[dist]:
+                    self.file.writelines("{0} {1} {2}\n".format(
+                        keyWords[0], dist, distros_dict[dist]['value']))
+                # if 'size' in distros_dict[dist] :
                 #     self.file.write("{0} {1}".format(keyWords[0], dist))
-                #     for elem in distros_dict[dist]['size']: 
+                #     for elem in distros_dict[dist]['size']:
                 #         self.file.write("[{0}]".format(distros_dict[dist]['size'][elem]))
             self.file.writelines('\n')
-        
+
         for i, nmsp in enumerate(namespaces):
-            if namespaces and i != 0 : self.file.writelines("{0} {1};\n".format(namespaces[0], nmsp))
+            if namespaces and i != 0:
+                self.file.writelines("{0} {1};\n".format(namespaces[0], nmsp))
         self.file.writelines('\n')
 
         # typedef int arrtype[N];
