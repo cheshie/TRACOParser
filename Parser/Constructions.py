@@ -18,7 +18,7 @@ class Constructions():
         # Case 1: for (init ; end_condition ; increment ) => handled ONLY THIS CASE IS INTERESTING
 
         # Prototype of construction namedtuple
-        For = namedtuple('for_n', ['init', 'end_condition', 'increment', 'instructions', 'is_parallel', 'original_line'])
+        For = namedtuple('for_n', ['init', 'end_condition', 'increment', 'instructions','variables', 'is_parallel', 'original_line'])
 
         # Split into three groups: group1; group2; group3
         txt_init, txt_cond, txt_inc     = search(r'.*?\((.*)\).*', instruction).group(1).split(';')
@@ -86,7 +86,8 @@ class Constructions():
                           increment=inc_dict,
                           instructions= [],
                           original_line= instruction,
-                          is_parallel  = is_parallel)
+                          is_parallel  = is_parallel,
+                          variables = dict())
     #
 
     def eval_pragma(self, instruction):
