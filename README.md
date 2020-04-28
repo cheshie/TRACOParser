@@ -5,6 +5,29 @@ Python (ver. 3.8+) tool that parses output from TRACO/PLUTO and generates CUDA.
 
 ## Structure
 This section provides theoretical information about structre of modules used in this Parser. 
+**Json - basic structure**. 
+This is example declaration of variables used in later source code examples:
+
+![Json](https://github.com/PrzemyslawSamsel/TRACOParser/blob/master/img/json_contents.png)
+
+We have two variables - one is N, and one is A - the latter has size property. Let's see now how Parser understands this: 
+
+ ```python
+Python 3.8.2 (tags/v3.8.2:7b3ab59, Feb 25 2020, 23:03:10) [MSC v.1916 64 bit (AMD64)] on win32
+Type "help", "copyright", "credits" or "license" for more information.
+>>>
+>>> from Parser.Parser import Parser
+>>> ps = Parser('Examples\example3.c')
+>>> _ = ps.readfile()
+>>>
+>>> ps.file_structure.variables
+{'N': {'value': 5, 'dtype': 'int', 'permissions': ''}, 'A': {'name': 'A', 'dtype': 'int', 'size': ('N', 'N'), 'permissions': 'R'}}
+>>>
+```
+
+In the example file was parsed (*readfile()* returns file_structure, so we just passed it to sam variable to avoid mess on the screen) and then we read *ps.file_structure.variables* dictionary, which contains exactly the same fields as *json.values* file does. Except for that insteaf of json list there is a tuple for size property, and permissions have already been parsed. Anyway - all the information that might be needed on later steps.
+
+
 
 
 
