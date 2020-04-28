@@ -8,11 +8,7 @@
     {
       "name"  : "A",
       "dtype" : "int",
-      "size":
-      {
-        "nrows": "N",
-        "ncols": "N"
-      },
+      "size": ["N", "N"],
       "permissions": 0
     }
 }
