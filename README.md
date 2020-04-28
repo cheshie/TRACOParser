@@ -74,6 +74,7 @@ We'll skip example2.c and run the last example (**example3.c**):
 The output from this example is as follows: 
 
 ![Example 3 Output](https://github.com/PrzemyslawSamsel/TRACOParser/blob/master/img/Example_3_OUT_v3.png)
+**recent changes** end_condition is now parsed as string, so if we have condition i < N, and N is i.e. = 5, then earlier end_condition was equal 4, now it's equal 'N - 1' - and left for later stages.
 
 
 This example contains a multiline 'FOR' which is defined using curly '{}' brackets. Reading the instructions, first one is **pragma**. After that, we find first 'FOR' which has also some instructions inside, first of which is variable assignment (dict), and the other one is another 'FOR' (Constructions object).  As we access the other FOR's instructions list, we see there is another assignment. 
