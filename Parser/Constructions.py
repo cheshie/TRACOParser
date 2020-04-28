@@ -44,15 +44,15 @@ class Constructions():
         # Case 1:
         if '+' in inc_sign:
             if '=' in cond_sign:
-                end_cond_dict['value'] = variables[cond_val]
+                end_cond_dict['value'] = cond_val
             else:
-                end_cond_dict['value'] = variables[cond_val]['value'] - 1
+                end_cond_dict['value'] = cond_val + '- 1'
         # Case 2:
         else:
             if '=' in cond_sign:
-                end_cond_dict['value'] = variables[cond_val]
+                end_cond_dict['value'] = cond_val
             else:
-                end_cond_dict['value'] = variables[cond_val] + 1
+                end_cond_dict['value'] = cond_val + '- 1'
 
         # Evaluate group 3 - incrementation
         # # # # # # # #
@@ -76,8 +76,6 @@ class Constructions():
             elif '-' in inc_sign:
                 inc_dict['inc'] = (-1) * int(inc_val)
 
-
-
         self.Constr = For(init={'name': init_var, 'value': int(init_val)},
                           end_condition=end_cond_dict,
                           increment=inc_dict,
@@ -89,6 +87,5 @@ class Constructions():
 
     def eval_pragma(self, instruction):
         pass
-        #self.Constr.text = instruction
     #
 #

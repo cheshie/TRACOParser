@@ -1,4 +1,4 @@
-from collections import namedtuple, deque
+from collections import namedtuple, deque, OrderedDict
 from os.path import dirname, abspath, join
 from re import search, compile
 import re
@@ -34,8 +34,7 @@ class Parser():
             # with key 'size' that contains their indices
             if self.jf.size in vars[vr]:
                 self.file_structure.variables[vars[vr][self.jf.name]] = vars[vr]
-                self.file_structure.variables[vars[vr][self.jf.name]][self.jf.size] = \
-                    tuple(vars[vr][self.jf.size].values())
+                self.file_structure.variables[vars[vr][self.jf.name]][self.jf.size] = tuple(vars[vr][self.jf.size])
             # Parsing non-iterable
             else:
                 self.file_structure.variables[vr] = vars[vr]
@@ -167,6 +166,7 @@ class Parser():
         with open(self.in_fname, 'r') as source:
             lines = source.readlines()
             for var_name in self.file_structure.variables.keys():
+
                 perms = ''
                 for c_line in lines:
                     # Skip lines that will not for sure contain assignment
@@ -178,7 +178,10 @@ class Parser():
                     # Case (2)
                     if search(rf'=(.*){var_name}', c_line):
                         perms += 'W'
-                self.file_structure.variables[var_name][self.jf.perms] = perms
+                # Before we assign, we need to remove duplicates from permissions. Bcoz the same variable
+                # might have been used before and used on the left side - means it will contain permissions "RR"
+                # which need to be reduced to just "R"
+                self.file_structure.variables[var_name][self.jf.perms] = "".join(OrderedDict.fromkeys(perms))
     #
 
     # To print class into a readable format
