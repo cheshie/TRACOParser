@@ -5,6 +5,8 @@ Python (ver. 3.8+) tool that parses output from TRACO/PLUTO and generates CUDA.
 
 ## Structure
 This section provides theoretical information about structre of modules used in this Parser. 
+
+
 **Json - basic structure**. 
 This is example declaration of variables used in later source code examples:
 
