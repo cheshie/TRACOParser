@@ -316,7 +316,6 @@ class FileBuilder:
         if variables_kernel:
             for variable in variables_kernel['kernel']:
                 if variable['value']:
-                    print(variable['name'])
                     self.file.writelines("\t" + self.declaration_variable_with_value(
                         variable['type'], variable['name'], variable['value']) + ";")
                 else:
@@ -328,9 +327,8 @@ class FileBuilder:
             variables[4], variables[6], variables[5], variables[7], keyWords[2])
         self.file.writelines(myKernelIf)
 
-        myKernelFor = "for({0}={1};{0}<{2};{0}++)\n\t\t{3}[{4}][{0}] = {5}\n\n}}".format(
-            variables[6], values[2], variables[0], variables[0], variables[10], values[1])
-        self.file.writelines(myKernelFor)
+        self.file.writelines(self.building_for(variables[6], self.lt_or_gt(values[2], values[1]), values[2], 1, values[0], '\tN[threadIdx][j] = 8;\n\t'))
+        self.file.writelines('\n}')
 
     def building_file(self):
         logger.info('Started file building')
