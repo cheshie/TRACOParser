@@ -1,0 +1,19 @@
+{
+  "kernel": [
+    {
+      "name": "h",
+      "value": "N",
+      "type" : "int"
+    },
+    {
+      "name": "w",
+      "value": "N",
+      "type" : "int"
+    },
+    {
+      "name": "j",
+      "value": null,
+      "type" : "int"
+    }
+  ]
+}

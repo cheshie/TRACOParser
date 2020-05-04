@@ -1,5 +1,6 @@
 import os
 import logging
+import json
 from typing import TextIO
 
 from Parser.Constructions import Constructions
@@ -297,8 +298,11 @@ class FileBuilder:
         # main function have 1 index in libs
         # mykernel other functions have indexes 1<10
         # other functions have indexes 10<
-
         # TODO: is Kernel func always global?
+
+        absolute_json_file_path = 'libs/kernel.json'
+        with open(absolute_json_file_path, 'r') as f:
+            variables_kernel = json.load(f)
 
         myKernelFunc = "\n{0} {1} {2}({3} {4}[{5}][{6}]){{\n\n".format(
             keyWords[3], keyWords[4], functions[0], typesVariables[0], variables[7], variables[0], variables[0])
@@ -307,13 +311,18 @@ class FileBuilder:
         myKernelBody1 = "\t{0} {1} = {2}.y * {3}.y + {4}.y; \n\t{5} {6} = {7}.x * {8}.x + {9}.x; \n\n".format(
             typesVariables[0], variables[2], variables[8], variables[9], variables[10],
             typesVariables[0], variables[3], variables[8], variables[9], variables[10])
-
         self.file.writelines(myKernelBody1)
 
-        definitionVariable2 = "\t{0} {1} = {2};\n\t{3} {4} = {5};\n\t{6} {7};\n\t".format(
-            typesVariables[0], variables[4], variables[0], typesVariables[0], variables[5], variables[0],
-            typesVariables[0], variables[6])
-        self.file.writelines(definitionVariable2)
+        if variables_kernel:
+            for variable in variables_kernel['kernel']:
+                if variable['value']:
+                    print(variable['name'])
+                    self.file.writelines("\t" + self.declaration_variable_with_value(
+                        variable['type'], variable['name'], variable['value']) + ";")
+                else:
+                    self.file.writelines("\t" + self.declaration_variable(
+                        variable['type'], variable['name']) + ";")
+                self.file.writelines('\n')
 
         myKernelIf = "if({0} >= {1} || {2} >= {3})\n\t\t{4};\n\n\t".format(
             variables[4], variables[6], variables[5], variables[7], keyWords[2])
