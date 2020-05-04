@@ -207,9 +207,8 @@ class FileBuilder:
         self.file.writelines(mainCudaFunc4)
 
     def building_headers(self):
-        absolute_json_file_path = 'libs/values.json'
-        with open(absolute_json_file_path, 'r') as f:
-            distros_dict = json.load(f)
+
+        distros_dict = self.phrase.variables
 
         for i, lib in enumerate(libraries):
             if libraries and i != 0:
@@ -221,10 +220,10 @@ class FileBuilder:
                 if 'value' in distros_dict[dist]:
                     self.file.writelines("{0} {1} {2}\n".format(
                         keyWords[0], dist, distros_dict[dist]['value']))
-                # if 'size' in distros_dict[dist] :
-                #     self.file.write("{0} {1}".format(keyWords[0], dist))
-                #     for elem in distros_dict[dist]['size']:
-                #         self.file.write("[{0}]".format(distros_dict[dist]['size'][elem]))
+                if 'size' in distros_dict[dist] :
+                    self.file.write("{0} {1}".format(keyWords[0], dist))
+                    for elem in range(len(distros_dict[dist]['size'])):
+                        self.file.write("[{0}]".format(distros_dict[dist]['size'][elem]))
             self.file.writelines('\n')
 
         for i, nmsp in enumerate(namespaces):
