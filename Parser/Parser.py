@@ -6,7 +6,7 @@ from .Constructions import Constructions
 from json import loads
 
 class Parser():
-    def __init__(self, inpt):
+    def __init__(self, inpt, values_filename=None):
         self.in_fname   = inpt
         self.f_contents = None
         # Namedtuple that contains info about program - initialized variables, executed instructions
@@ -21,6 +21,11 @@ class Parser():
         # json fields names, to be in one place
         self.jf    = namedtuple('fields', ['name', 'dtype', 'perms', 'size'])\
             (name='name', dtype='dtype', perms='permissions', size='size')
+        # If user wants to use custom values.json filename (default is in libs folder)
+        if values_filename is None:
+            self.values_filename = join(dirname(dirname(abspath(__file__))), self.variables_json)
+        else:
+            self.values_filename = values_filename
     #
 
     def readfile(self):
@@ -28,7 +33,7 @@ class Parser():
         # For now, we declare two variables - N and array A
         # There is a field 'name' for iterables - it is important for reading json, nothing else
         # But I will leave it here because team 2 might have already used it somewhere)
-        vars = loads(open(join(dirname(dirname(abspath(__file__))), self.variables_json),'r').read())
+        vars = loads(open(self.values_filename,'r').read())
         for vr in vars.keys():
             # Parsing iterable - only difference is that iterables will contain dictionary
             # with key 'size' that contains their indices
@@ -66,8 +71,12 @@ class Parser():
                 # Remove all trailing and leading whitespaces
                 line = line.strip()
 
+                # Remove all comments for "interpretation" process
+                if '//' in line:
+                    line = line[:line.index('//')]
+
                 # If empty line spotted, skip a line
-                if search(r'^$', line):
+                if search(r'^$', line) or search(r'^\s+$', line):
                     continue
 
                 # Handle multiline 'for' opening
@@ -127,8 +136,16 @@ class Parser():
                 else:
                     # All lines must be terminated
                     if line.endswith(';'):
-                        # Split line into variable thas is assigned to, index and value that is asssigned
-                        var, index, val = search(r'^(\s*)(\w+)((\[\w+\])*)(\s*)(=)(\s*)(\w+)(;)', line).group(2,3,8)
+
+                        # If this hits, it's most likely a standard assignment i.e. a = something or a[x][x] = sth
+                        # (assignment)
+                        # Second case - assignment with addition/multiplication/division at the time
+                        if search(r'^(\w+)(\[.*\])\s+(.?=)\s(.*)(;)', line):
+                            # Split line into variable that is assigned to, index and value that is assigned
+                            var, index, val = search(r'^(\w+)(\[.*\])\s+(.?=)\s(.*)(;)', line).group(1,2,4) # search(r'^(\s*)(\w+)((\[\w+\])*)(\s*)(=)(\s*)(\w+)(;)', line).group(2,3,8)
+                            # If there is +=, -=, *= or /= (len == 2)
+                            if len(search(r'^(\w+)(\[.*\])\s+(.?=)\s(.*)(;)', line).group(3)) == 2:
+                                val = var + index + ' ' + search(r'^(\w+)(\[.*\])\s+(.?=)\s(.*)(;)', line).group(3)[0]  +  ' ' + val
 
                         # If variable does not exist
                         if var not in self.file_structure.variables:

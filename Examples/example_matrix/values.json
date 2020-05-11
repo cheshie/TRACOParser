@@ -1,0 +1,43 @@
+{
+  "r1": {
+    "value" : 5,
+    "dtype" : "int",
+    "permissions" : 0
+  },
+  "r2": {
+    "value" : 5,
+    "dtype" : "int",
+    "permissions" : 0
+  },
+  "c2": {
+    "value" : 5,
+    "dtype" : "int",
+    "permissions" : 0
+  },
+  "c1": {
+    "value" : 5,
+    "dtype" : "int",
+    "permissions" : 0
+  },
+  "mult":
+    {
+      "name"  : "mult",
+      "dtype" : "int",
+      "size": ["c1", "r2"],
+      "permissions": 0
+    },
+  "a":
+    {
+      "name"  : "a",
+      "dtype" : "int",
+      "size": ["r1", "c1"],
+      "permissions": 0
+    },
+  "b":
+    {
+      "name"  : "b",
+      "dtype" : "int",
+      "size": ["r2", "c2"],
+      "permissions": 0
+    }
+}
