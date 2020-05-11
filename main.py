@@ -8,6 +8,7 @@ from argparse import ArgumentParser
 def parse_arguments(args_parser = ArgumentParser(prog='PLUTO / TRACO Code Parser',
                                                  description='Parsing code from P/T to CUDA')):
     args_parser.add_argument('-i', '--infile', help='input file name', default='Examples/example1.c')
+    args_parser.add_argument('-vf', '--valuesfile', help='file that contains variables', default=None)
     args_parser.add_argument('-o', help='output file')
 
     return args_parser.parse_args()
