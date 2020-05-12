@@ -174,6 +174,16 @@ class FileBuilder:
             '', variables[14], 0) + "=" + self.creating_one_dimensional_array('new', typesVariables[0],
                                                                               'rows*cols') + ";\n")
 
+
+        # for (int i = 1; i < rows; ++i) { A[i] = A[i-1] + cols; };
+        self.file.writelines("\n\t" + self.building_for('i', self.lt_or_gt(1, 10), 1, 1, variables[11],
+                                                        self.creating_one_dimensional_array(
+                                                            '', variables[14],
+                                                            0) + "=" + self.creating_one_dimensional_array('',
+                                                                                                           variables[
+                                                                                                               14],
+                                                                                                           'i-1') + " + cols;\n\t") + ";\n")
+
         for instr in self.phrase.instructions:
             if isinstance(instr, Constructions):
                 for instr2 in instr.Constr.instructions:
@@ -204,39 +214,16 @@ class FileBuilder:
                                             self.creating_two_dimensional_array(
                                                 '',
                                                 instr3['var'],
-                                                'N',
-                                                'N'
+                                                'i',
+                                                'j'
                                             ) + "=" + instr3['val'] + ";\n\t"
                                         )
                                     )
                                 )
-        # for a in self.phrase.instructions:
-        #     while isinstance(a, Constructions):  # or hasattr(a, 'Constr'):
-        #         print(dir(a.Constr))
-        #         a = a.Constr.instructions[0]
-        #     print(a)
-
-        # for (int i = 1; i < rows; ++i) { A[i] = A[i-1] + cols; };
-        self.file.writelines("\n\t" + self.building_for('i', self.lt_or_gt(1, 10), 1, 1, variables[11],
-                                                        self.creating_one_dimensional_array(
-                                                            '', variables[14],
-                                                            0) + "=" + self.creating_one_dimensional_array('',
-                                                                                                           variables[
-                                                                                                               14],
-                                                                                                           'i-1') + " + cols;\n\t") + ";\n")
-
-        # for (int i = 0; i < rows; ++i) { for (int j = 0; j < cols; ++j) { A[i][j] = i*cols+j; }; };
-        self.file.writelines("\n\t" + self.building_for('x', self.lt_or_gt(1, 10), 1, 2, 10, self.building_for('y', '<',
-                                                                                                               1, 2, 10,
-                                                                                                               self.creating_two_dimensional_array(
-                                                                                                                   '',
-                                                                                                                   'A',
-                                                                                                                   'N',
-                                                                                                                   'N') + "= i*cols+j;\n\t") + ";\n\t") + ";\n")
         self.building_cuda()
 
     def building_cuda(self):
-        mainCudaFunc1 = "\t{0}(({1}**)&{2}, sizint) * {3}* {4});\n".format(
+        mainCudaFunc1 = "\t{0}(({1}**)&{2}, sizeof(int) * {3}* {4});\n".format(
             functions[2], keyWords[4], variables[13], variables[11], variables[12])
         self.file.writelines(mainCudaFunc1)
 
@@ -246,15 +233,18 @@ class FileBuilder:
                                                                                    variables[12], functions[4])
         self.file.writelines(mainCudaFunc2)
 
-        mainCudaFunc3 = "\t{0} <<{1},{1}>>({2});\n\n".format(
+        mainCudaFunc3 = "\t{0} <<<{1},{1}>>>({2});\n\n".format(
             functions[0], variables[0], variables[13])
         self.file.writelines(mainCudaFunc3)
 
-        mainCudaFunc4 = "\t{0}({2}[0], {1}, {3}({4}) * {5}* {6}, {7});\n\n}}".format(functions[4], variables[13],
+        mainCudaFunc4 = "\t{0}({2}[0], {1}, {3}({4}) * {5}* {6}, {7});\n".format(functions[3], variables[13],
                                                                                      variables[14], keyWords[5],
                                                                                      typesVariables[0], variables[11],
                                                                                      variables[12], functions[5])
         self.file.writelines(mainCudaFunc4)
+
+        # free memory
+        self.file.writelines("\n\tdelete A[0];\n\tdelete A;\n\tcudaFree(dA);\n}")
 
     def building_headers(self):
 
@@ -323,11 +313,11 @@ class FileBuilder:
                         variable['type'], variable['name']) + ";")
                 self.file.writelines('\n')
 
-        myKernelIf = "if({0} >= {1} || {2} >= {3})\n\t\t{4};\n\n\t".format(
+        myKernelIf = "if(row >= h || col >= w)\n\t\t{4};\n\n\t".format(
             variables[4], variables[6], variables[5], variables[7], keyWords[2])
         self.file.writelines(myKernelIf)
 
-        self.file.writelines(self.building_for(variables[6], self.lt_or_gt(values[2], values[1]), values[2], 1, values[0], '\tN[threadIdx][j] = 8;\n\t'))
+        self.file.writelines(self.building_for(variables[6], self.lt_or_gt(values[2], values[1]), values[2], 1, values[0], '\td_A[threadIdx.x][j] = 8;\n\t'))
         self.file.writelines('\n}')
 
     def building_file(self):
