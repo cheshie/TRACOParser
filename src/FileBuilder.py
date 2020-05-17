@@ -7,6 +7,7 @@ from Parser.Constructions import Constructions
 
 logger = logging.getLogger(__name__)
 
+N = 5
 _ext = '.cu'
 
 lib_folder = os.getcwd() + '/libs'
@@ -197,7 +198,7 @@ class FileBuilder:
                                         instr.Constr.init['name'],
                                         self.lt_or_gt(
                                             instr.Constr.init['value'],
-                                            instr.Constr.end_condition['value']
+                                            eval(instr.Constr.end_condition['value'])
                                         ),
                                         instr.Constr.init['value'],
                                         instr.Constr.increment['inc'],
@@ -206,7 +207,7 @@ class FileBuilder:
                                             instr2.Constr.init['name'],
                                             self.lt_or_gt(
                                                 instr2.Constr.init['value'],
-                                                instr2.Constr.end_condition['value']
+                                                eval(instr2.Constr.end_condition['value'])
                                             ),
                                             instr2.Constr.init['value'],
                                             instr2.Constr.increment['inc'],
