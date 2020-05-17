@@ -162,12 +162,12 @@ class FileBuilder:
         self.file.writelines("\t" + self.declaration_variable_with_value(
             typesVariables[0], variables[12], variables[0]) + ";\n")
         self.file.writelines(
-            "\t" + self.declaration_variable(variables[1], '*d') + ";\n")
+            "\t" + self.declaration_variable(variables[1], '*dA') + ";\n")
 
         # int** A = new int*[rows];
         self.file.writelines("\t" + self.declaration_variable_with_value(
             typesVariables[2], variables[14],
-            self.creating_one_dimensional_array('new', typesVariables[2], variables[11])) + ";\n")
+            self.creating_one_dimensional_array('new', typesVariables[1], variables[11])) + ";\n")
 
         # A[0] = new int[rows * cols];
         self.file.writelines("  " + self.creating_one_dimensional_array(
@@ -176,13 +176,13 @@ class FileBuilder:
 
 
         # for (int i = 1; i < rows; ++i) { A[i] = A[i-1] + cols; };
-        self.file.writelines("\n\t" + self.building_for('i', self.lt_or_gt(1, 10), 1, 1, variables[11],
+        self.file.writelines("\n\t" + self.building_for('int i', self.lt_or_gt(1, 10), 1, 1, variables[11],
                                                         self.creating_one_dimensional_array(
                                                             '', variables[14],
-                                                            0) + "=" + self.creating_one_dimensional_array('',
+                                                            'i') + "=" + self.creating_one_dimensional_array('',
                                                                                                            variables[
                                                                                                                14],
-                                                                                                           'i-1') + " + cols;\n\t") + ";\n")
+                                                                                                           'i-1') + " + cols;\n\t") + "\n")
 
         for instr in self.phrase.instructions:
             if isinstance(instr, Constructions):
@@ -223,21 +223,21 @@ class FileBuilder:
         self.building_cuda()
 
     def building_cuda(self):
-        mainCudaFunc1 = "\t{0}(({1}**)&{2}, sizeof(int) * {3}* {4});\n".format(
+        mainCudaFunc1 = "\t{0}(({1} **)&{2}, sizeof(int) * {3}* {4});\n".format(
             functions[2], keyWords[4], variables[13], variables[11], variables[12])
         self.file.writelines(mainCudaFunc1)
 
-        mainCudaFunc2 = "\t{0}({1}, {2}[0], {3}({4}) * {5}* {6}, {7});\n\n".format(functions[3], variables[13],
+        mainCudaFunc2 = "\t{0}({1}, {2}[0], {3}({4}) * {5} * {6}, {7});\n\n".format(functions[3], variables[13],
                                                                                    variables[14], keyWords[5],
                                                                                    typesVariables[0], variables[11],
                                                                                    variables[12], functions[4])
         self.file.writelines(mainCudaFunc2)
 
-        mainCudaFunc3 = "\t{0} <<<{1},{1}>>>({2});\n\n".format(
+        mainCudaFunc3 = "\t{0}<<<{1},{1}>>>({2});\n\n".format(
             functions[0], variables[0], variables[13])
         self.file.writelines(mainCudaFunc3)
 
-        mainCudaFunc4 = "\t{0}({2}[0], {1}, {3}({4}) * {5}* {6}, {7});\n".format(functions[3], variables[13],
+        mainCudaFunc4 = "\t{0}({2}[0], {1}, {3}({4}) * {5} * {6}, {7});\n".format(functions[3], variables[13],
                                                                                      variables[14], keyWords[5],
                                                                                      typesVariables[0], variables[11],
                                                                                      variables[12], functions[5])
@@ -313,11 +313,11 @@ class FileBuilder:
                         variable['type'], variable['name']) + ";")
                 self.file.writelines('\n')
 
-        myKernelIf = "if(row >= h || col >= w)\n\t\t{4};\n\n\t".format(
+        myKernelIf = "\tif(row >= h || col >= w)\n\t\t{4};\n\n\t".format(
             variables[4], variables[6], variables[5], variables[7], keyWords[2])
         self.file.writelines(myKernelIf)
 
-        self.file.writelines(self.building_for(variables[6], self.lt_or_gt(values[2], values[1]), values[2], 1, values[0], '\td_A[threadIdx.x][j] = 8;\n\t'))
+        self.file.writelines(self.building_for(variables[6], self.lt_or_gt(values[2], values[1]), values[2], 1, 'N', '\td_A[threadIdx.x][j] = 8;\n\t'))
         self.file.writelines('\n}')
 
     def building_file(self):
