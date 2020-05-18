@@ -8,6 +8,9 @@ from Parser.Constructions import Constructions
 logger = logging.getLogger(__name__)
 
 N = 5
+r1 = N
+c1 = N
+c2 = N
 _ext = '.cu'
 
 lib_folder = os.getcwd() + '/libs'
@@ -191,7 +194,48 @@ class FileBuilder:
                     if isinstance(instr2, Constructions):
                         for instr3 in instr2.Constr.instructions:
                             if isinstance(instr3, Constructions):
-                                pass
+                                for instr4 in instr3.Constr.instructions:
+                                    if isinstance(instr4, Constructions):
+                                        pass
+                                    else:
+                                        self.file.writelines(
+                                            self.building_for(
+                                                instr.Constr.init['name'],
+                                                self.lt_or_gt(
+                                                    instr.Constr.init['value'],
+                                                    eval(instr.Constr.end_condition['value'])
+                                                ),
+                                                instr.Constr.init['value'],
+                                                instr.Constr.increment['inc'],
+                                                instr.Constr.end_condition['value'],
+                                                self.building_for(
+                                                    instr2.Constr.init['name'],
+                                                    self.lt_or_gt(
+                                                        instr2.Constr.init['value'],
+                                                        eval(instr2.Constr.end_condition['value'])
+                                                    ),
+                                                    instr2.Constr.init['value'],
+                                                    instr2.Constr.increment['inc'],
+                                                    instr2.Constr.end_condition['value'],
+                                                    self.building_for(
+                                                        instr3.Constr.init['name'],
+                                                        self.lt_or_gt(
+                                                            instr3.Constr.init['value'],
+                                                            eval(instr3.Constr.end_condition['value'])
+                                                        ),
+                                                        instr3.Constr.init['value'],
+                                                        instr3.Constr.increment['inc'],
+                                                        instr3.Constr.end_condition['value'],
+                                                        self.creating_two_dimensional_array(
+                                                            '',
+                                                            instr4['var'],
+                                                            'i',
+                                                            'j'
+                                                        ) + "=" + instr4['val'] + ";\n\t"
+                                                    )
+                                                )
+                                            )
+                                        )
                             else:
                                 self.file.writelines(
                                     self.building_for(
