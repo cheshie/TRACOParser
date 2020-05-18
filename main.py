@@ -33,8 +33,9 @@ def test_parser(parser=Parser(parse_arguments().infile)):
 test_parser()
 
 if __name__ == "__main__":
-    file_name = "Examples/example1.c"
+    file_name = "Examples/example_matrix/example_matrix.c"
+    value_path = "Examples/example_matrix/values.json"
     # readfile() returns a dict('variables', 'instructions')
-    parsing_phrases = Parser(file_name).readfile()
+    parsing_phrases = Parser(file_name, value_path).readfile()
     filename = 'main'
     FileBuilder(parsing_phrases, filename)
