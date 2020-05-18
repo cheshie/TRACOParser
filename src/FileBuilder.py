@@ -93,7 +93,7 @@ class FileBuilder:
     @staticmethod
     def building_for(variable, condition, start, step, stop, inside=''):
         logger.info("Building for")
-        return f"for(int {variable} = {start}; {variable} {condition} {stop}; {variable} = {variable} + {step}) {{ \n\t{inside} }}"
+        return f"for(int {variable} = {start}; {variable} {condition} {stop}; {variable} = {variable} + {step})\n{{ \n\t{inside} }}"
 
     # declaration_variable_with_value - function to create variable with value
     # type - variable type
