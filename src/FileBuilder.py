@@ -304,7 +304,7 @@ class FileBuilder:
                     self.file.writelines("{0} {1} {2}\n".format(
                         keyWords[0], dist, self.phrase.variables[dist]['value']))
                 if 'size' in self.phrase.variables[dist]:
-                    self.file.write("{0} {1}".format(keyWords[0], dist))
+                    self.file.write("\n{0} {1}".format(keyWords[0], dist))
                     for elem in range(len(self.phrase.variables[dist]['size'])):
                         self.file.write("[{0}]".format(self.phrase.variables[dist]['size'][elem]))
             self.file.writelines('\n')
@@ -318,7 +318,7 @@ class FileBuilder:
         if self.phrase.variables:
             for dist in self.phrase.variables:
                 if 'value' in self.phrase.variables[dist]:
-                    self.file.writelines('{};'.format(
+                    self.file.writelines('{};\n'.format(
                         self.creating_one_dimensional_array(
                             self.phrase.variables[dist]['dtype'],
                             variables[1],
