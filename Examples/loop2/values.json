@@ -1,0 +1,28 @@
+{
+  "N": {
+    "value" : 5,
+    "dtype" : "int",
+    "permissions" : 0
+  },
+  "i": {
+    "value" : 5,
+    "dtype" : "int",
+    "permissions" : 0
+  },
+  "j": {
+    "value" : 5,
+    "dtype" : "int",
+    "permissions" : 0
+  },
+  "k": {
+    "value" : 5,
+    "dtype" : "int",
+    "permissions" : 0
+  },
+  "a":{
+      "name"  : "a",
+      "dtype" : "int",
+      "size": ["N", "N"],
+      "permissions": 0
+    }
+}

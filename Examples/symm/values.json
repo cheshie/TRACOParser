@@ -1,33 +1,43 @@
 {
-  "r1": {
+  "i": {
     "value" : 5,
     "dtype" : "int",
     "permissions" : 0
   },
-  "c1": {
+  "j": {
     "value" : 5,
     "dtype" : "int",
     "permissions" : 0
   },
-  "mult":
+  "k": {
+    "value" : 5,
+    "dtype" : "int",
+    "permissions" : 0
+  },
+  "NMAX": {
+    "value" : 5,
+    "dtype" : "int",
+    "permissions" : 0
+  },
+  "c":
     {
-      "name"  : "mult",
+      "name"  : "c",
       "dtype" : "int",
-      "size": ["c1", "r1"],
+      "size": ["NMAX", "NMAX"],
       "permissions": 0
     },
   "a":
     {
       "name"  : "a",
       "dtype" : "int",
-      "size": ["r1", "c1"],
+      "size": ["NMAX", "NMAX"],
       "permissions": 0
     },
   "b":
     {
       "name"  : "b",
       "dtype" : "int",
-      "size": ["r1", "c1"],
+      "size": ["NMAX", "NMAX"],
       "permissions": 0
     }
 }

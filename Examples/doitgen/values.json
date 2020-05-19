@@ -1,0 +1,43 @@
+{
+  "N": {
+    "value" : 0,
+    "dtype" : "int"
+  },
+  "r": {
+    "value" : 0,
+    "dtype" : "int"
+  },
+  "q": {
+    "value" : 0,
+    "dtype" : "int"
+  },
+  "s": {
+    "value" : 0,
+    "dtype" : "int"
+  },
+  "p": {
+    "value" : 0,
+    "dtype" : "int"
+  },
+  "sum":
+    {
+      "name"  : "sum",
+      "dtype" : "int",
+      "size": ["N", "N", "N"],
+      "permissions": 0
+    },
+  "A":
+    {
+      "name"  : "A",
+      "dtype" : "int",
+      "size": ["N", "N", "N"],
+      "permissions": 0
+    },
+  "C4":
+    {
+      "name"  : "C4",
+      "dtype" : "int",
+      "size": ["N", "N"],
+      "permissions": 0
+    }
+}
