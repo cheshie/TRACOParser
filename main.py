@@ -30,7 +30,25 @@ def test_parser(parser=Parser(parse_arguments().infile)):
         else:
             print(x)
 
-test_parser()
+def test_new_examples():
+    # Example 1
+    ps = Parser(r'C:\Users\przem\OneDrive\PycharmProjects\S2_SEM1\Projekt\TRACOParser\Examples\loop2\loop2.c',
+                r'C:\Users\przem\OneDrive\PycharmProjects\S2_SEM1\Projekt\TRACOParser\Examples\loop2\values.json')
+
+    _ = ps.readfile()
+    print(_.instructions)
+    print(_.instructions[0].Constr)
+    print(_.instructions[0].Constr.instructions[0])
+    print(_.instructions[0].Constr.instructions[0].Constr)
+    print(_.instructions[0].Constr.instructions[0].Constr.instructions[0].Constr)
+    print(_.instructions[0].Constr.instructions[0].Constr.instructions[0].Constr.instructions[0])
+
+    # Example 2
+    ps = Parser(r'C:\Users\przem\OneDrive\PycharmProjects\S2_SEM1\Projekt\TRACOParser\Examples\loop2\loop2.c',
+                r'C:\Users\przem\OneDrive\PycharmProjects\S2_SEM1\Projekt\TRACOParser\Examples\loop2\values.json')
+
+test_new_examples()
+# test_parser()
 
 # if __name__ == "__main__":
 #     file_name = "Examples/example1.c"

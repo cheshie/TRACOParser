@@ -102,9 +102,12 @@ class Parser():
                 if instruction in self.keywords:
                     if instruction == 'pragma':
                         is_parallel = True
-                        self.file_structure.instructions.append('pragma')
+                        # New change - commenting out these two lines in order to handle case from loop2.c example
+                        # meaning - handling embedded pragma instructions, and also not displaying
+                        # them in the instructions list
                         # Move to the next instruction in source file
-                        self.instr_nr += 1
+                        # self.instr_nr += 1
+                        # self.file_structure.instructions.append('pragma')
                         continue
 
                     # Create object containing code in the line
