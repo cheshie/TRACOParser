@@ -31,7 +31,7 @@ def test_parser(parser=Parser(parse_arguments().infile)):
             print(x)
 
 def test_new_examples():
-    # Example 1
+    # Example 1 - loop2.c
     ps = Parser(r'C:\Users\przem\OneDrive\PycharmProjects\S2_SEM1\Projekt\TRACOParser\Examples\loop2\loop2.c',
                 r'C:\Users\przem\OneDrive\PycharmProjects\S2_SEM1\Projekt\TRACOParser\Examples\loop2\values.json')
 
@@ -47,7 +47,7 @@ def test_new_examples():
     ps = Parser(r'C:\Users\przem\OneDrive\PycharmProjects\S2_SEM1\Projekt\TRACOParser\Examples\loop2\loop2.c',
                 r'C:\Users\przem\OneDrive\PycharmProjects\S2_SEM1\Projekt\TRACOParser\Examples\loop2\values.json')
 
-test_new_examples()
+# test_new_examples()
 # test_parser()
 
 # if __name__ == "__main__":
