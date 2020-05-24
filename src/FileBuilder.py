@@ -339,9 +339,13 @@ class FileBuilder:
         with open(absolute_json_file_path, 'r') as f:
             variables_kernel = json.load(f)
 
-        myKernelFunc = "\n{0} {1} {2}({3} {4}[{5}][{6}]){{\n\n".format(
-            keyWords[3], keyWords[4], functions[0], typesVariables[0], variables[7], variables[0], variables[0])
-        self.file.writelines(myKernelFunc)
+        self.file.writelines(
+            "\n\n" + self.creating_function("__global__ " + keyWords[4], functions[0], '', 'int d_a[r1][c1],int d_b[r2][c2],int d_mult[r1][c2]') + "\n")
+
+
+        # myKernelFunc = "\n{0} {1} {2}({3} {4}[{5}][{6}]){{\n\n".format(
+        #     keyWords[3], keyWords[4], functions[0], typesVariables[0], variables[7], variables[0], variables[0])
+        # self.file.writelines(myKernelFunc)
 
         myKernelBody1 = "\t{0} {1} = {2}.y * {3}.y + {4}.y; \n\t{5} {6} = {7}.x * {8}.x + {9}.x; \n\n".format(
             typesVariables[0], variables[2], variables[8], variables[9], variables[10],
@@ -362,7 +366,85 @@ class FileBuilder:
             variables[4], variables[6], variables[5], variables[7], keyWords[2])
         self.file.writelines(myKernelIf)
 
-        self.file.writelines(self.building_for(variables[6], self.lt_or_gt(values[2], values[1]), values[2], 1, 'N', '\td_A[threadIdx.x][j] = 8;\n\t'))
+        # recznie trzeba usunac najbardziej zewnetrzna petle i zmienic idnex i na threadIdx
+        for instr in self.phrase.instructions:
+            if isinstance(instr, Constructions):
+                for instr2 in instr.Constr.instructions:
+                    if isinstance(instr2, Constructions):
+                        for instr3 in instr2.Constr.instructions:
+                            if isinstance(instr3, Constructions):
+                                for instr4 in instr3.Constr.instructions:
+                                    if isinstance(instr4, Constructions):
+                                        pass
+                                    else:
+                                        self.file.writelines(
+                                            self.building_for(
+                                                instr.Constr.init['name'],
+                                                self.lt_or_gt(
+                                                    instr.Constr.init['value'],
+                                                    eval(instr.Constr.end_condition['value'])
+                                                ),
+                                                instr.Constr.init['value'],
+                                                instr.Constr.increment['inc'],
+                                                instr.Constr.end_condition['value'],
+                                                self.building_for(
+                                                    instr2.Constr.init['name'],
+                                                    self.lt_or_gt(
+                                                        instr2.Constr.init['value'],
+                                                        eval(instr2.Constr.end_condition['value'])
+                                                    ),
+                                                    instr2.Constr.init['value'],
+                                                    instr2.Constr.increment['inc'],
+                                                    instr2.Constr.end_condition['value'],
+                                                    self.building_for(
+                                                        instr3.Constr.init['name'],
+                                                        self.lt_or_gt(
+                                                            instr3.Constr.init['value'],
+                                                            eval(instr3.Constr.end_condition['value'])
+                                                        ),
+                                                        instr3.Constr.init['value'],
+                                                        instr3.Constr.increment['inc'],
+                                                        instr3.Constr.end_condition['value'],
+                                                        self.creating_two_dimensional_array(
+                                                            '',
+                                                            instr4['var'],
+                                                            'i',
+                                                            'j'
+                                                        ) + "=" + instr4['val'] + ";\n\t"
+                                                    )
+                                                )
+                                            )
+                                        )
+                            else:
+                                self.file.writelines(
+                                    self.building_for(
+                                        instr.Constr.init['name'],
+                                        self.lt_or_gt(
+                                            instr.Constr.init['value'],
+                                            eval(instr.Constr.end_condition['value'])
+                                        ),
+                                        instr.Constr.init['value'],
+                                        instr.Constr.increment['inc'],
+                                        instr.Constr.end_condition['value'],
+                                        self.building_for(
+                                            instr2.Constr.init['name'],
+                                            self.lt_or_gt(
+                                                instr2.Constr.init['value'],
+                                                eval(instr2.Constr.end_condition['value'])
+                                            ),
+                                            instr2.Constr.init['value'],
+                                            instr2.Constr.increment['inc'],
+                                            instr2.Constr.end_condition['value'],
+                                            self.creating_two_dimensional_array(
+                                                '',
+                                                instr3['var'],
+                                                'i',
+                                                'j'
+                                            ) + "=" + instr3['val'] + ";\n\t"
+                                        )
+                                    )
+                                )
+
         self.file.writelines('\n}')
 
     def building_file(self):

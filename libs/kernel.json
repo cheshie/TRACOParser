@@ -2,17 +2,12 @@
   "kernel": [
     {
       "name": "h",
-      "value": "N",
+      "value": "r1",
       "type" : "int"
     },
     {
       "name": "w",
-      "value": "N",
-      "type" : "int"
-    },
-    {
-      "name": "j",
-      "value": null,
+      "value": "c1",
       "type" : "int"
     }
   ]
