@@ -1,0 +1,32 @@
+{
+  "matrix":
+  [
+    {
+      "name": "dA",
+      "type" : "int",
+      "mem_cpu" : "true"
+    },
+    {
+      "name": "dB",
+      "type" : "int",
+      "mem_cpu" : "true"
+    },
+    {
+      "name": "dMult",
+      "type" : "int",
+      "mem_cpu" : "true"
+    },
+        {
+      "name": "a",
+      "type" : "int"
+    },
+    {
+      "name": "b",
+      "type" : "int"
+    },
+    {
+      "name": "mult",
+      "type" : "int"
+    }
+  ]
+}

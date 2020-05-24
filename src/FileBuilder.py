@@ -153,40 +153,55 @@ class FileBuilder:
             return '>'
 
     def building_main(self):
-        # TODO: build main body -> loops, variables, etc.
+
         # int main() {
         self.file.writelines(
             "\n\n" + self.creating_function(typesVariables[0], functions[1], '', '') + "\n")
 
-        # int rows = N;
-        # int cols = N;
-        # arrtype *dA;
-        self.file.writelines("\t" + self.declaration_variable_with_value(
-            typesVariables[0], variables[11], variables[0]) + ";\n")
-        self.file.writelines("\t" + self.declaration_variable_with_value(
-            typesVariables[0], variables[12], variables[0]) + ";\n")
-        self.file.writelines(
-            "\t" + self.declaration_variable(variables[1], '*dA') + ";\n")
+        matrix_json_file_path = 'libs/matrix.json'
+        with open(matrix_json_file_path, 'r') as f:
+            variables_matrix = json.load(f)
+
+        if variables_matrix:
+            for variable in variables_matrix['matrix']:
+                try:
+                    if variable['mem_cpu']:
+                        self.file.writelines("\t" + self.declaration_variable(
+                            "arrtype", "*" + variable['name']) + ";")
+                except :
+                    self.file.writelines("\t" + self.declaration_variable_with_value(
+                        typesVariables[2], variable['name'],
+                        self.creating_one_dimensional_array('new', typesVariables[1], "r1")) + ";\n")
+                    self.file.writelines("  " + self.creating_one_dimensional_array(
+                        '', variable['name'], 0) + "=" + self.creating_one_dimensional_array('new', typesVariables[0],
+                                                                                          'r1*c1') + ";")
+                    self.file.writelines("\n\t" + self.building_for('int i', self.lt_or_gt(1, 10), 1, 1, "r1",
+                                                                    self.creating_one_dimensional_array(
+                                                                        '', variable['name'],
+                                                                        'i') + "=" + self.creating_one_dimensional_array(
+                                                                        '',  variable['name'], 'i-1') + " + c1;\n\t") + "\n")
+                self.file.writelines('\n')
+
 
         # int** A = new int*[rows];
-        self.file.writelines("\t" + self.declaration_variable_with_value(
-            typesVariables[2], variables[14],
-            self.creating_one_dimensional_array('new', typesVariables[1], variables[11])) + ";\n")
+        # self.file.writelines("\t" + self.declaration_variable_with_value(
+        #     typesVariables[2], variables[14],
+        #     self.creating_one_dimensional_array('new', typesVariables[1], variables[11])) + ";\n")
 
         # A[0] = new int[rows * cols];
-        self.file.writelines("  " + self.creating_one_dimensional_array(
-            '', variables[14], 0) + "=" + self.creating_one_dimensional_array('new', typesVariables[0],
-                                                                              'rows*cols') + ";\n")
+        # self.file.writelines("  " + self.creating_one_dimensional_array(
+        #     '', variables[14], 0) + "=" + self.creating_one_dimensional_array('new', typesVariables[0],
+        #                                                                       'rows*cols') + ";\n")
 
 
         # for (int i = 1; i < rows; ++i) { A[i] = A[i-1] + cols; };
-        self.file.writelines("\n\t" + self.building_for('int i', self.lt_or_gt(1, 10), 1, 1, variables[11],
-                                                        self.creating_one_dimensional_array(
-                                                            '', variables[14],
-                                                            'i') + "=" + self.creating_one_dimensional_array('',
-                                                                                                           variables[
-                                                                                                               14],
-                                                                                                           'i-1') + " + cols;\n\t") + "\n")
+        # self.file.writelines("\n\t" + self.building_for('int i', self.lt_or_gt(1, 10), 1, 1, variables[11],
+        #                                                 self.creating_one_dimensional_array(
+        #                                                     '', variables[14],
+        #                                                     'i') + "=" + self.creating_one_dimensional_array('',
+        #                                                                                                    variables[
+        #                                                                                                        14],
+        #                                                                                                    'i-1') + " + cols;\n\t") + "\n")
 
         for instr in self.phrase.instructions:
             if isinstance(instr, Constructions):
@@ -342,10 +357,6 @@ class FileBuilder:
         self.file.writelines(
             "\n\n" + self.creating_function("__global__ " + keyWords[4], functions[0], '', 'int d_a[r1][c1],int d_b[r2][c2],int d_mult[r1][c2]') + "\n")
 
-
-        # myKernelFunc = "\n{0} {1} {2}({3} {4}[{5}][{6}]){{\n\n".format(
-        #     keyWords[3], keyWords[4], functions[0], typesVariables[0], variables[7], variables[0], variables[0])
-        # self.file.writelines(myKernelFunc)
 
         myKernelBody1 = "\t{0} {1} = {2}.y * {3}.y + {4}.y; \n\t{5} {6} = {7}.x * {8}.x + {9}.x; \n\n".format(
             typesVariables[0], variables[2], variables[8], variables[9], variables[10],
