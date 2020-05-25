@@ -175,136 +175,133 @@ class FileBuilder:
                     self.file.writelines("  " + self.creating_one_dimensional_array(
                         '', variable['name'], 0) + "=" + self.creating_one_dimensional_array('new', typesVariables[0],
                                                                                           'r1*c1') + ";")
-                    self.file.writelines("\n\t" + self.building_for('int i', self.lt_or_gt(1, 10), 1, 1, "r1",
+                    self.file.writelines("\n\t" + self.building_for('i', self.lt_or_gt(1, 10), 1, 1, "r1",
                                                                     self.creating_one_dimensional_array(
                                                                         '', variable['name'],
                                                                         'i') + "=" + self.creating_one_dimensional_array(
                                                                         '',  variable['name'], 'i-1') + " + c1;\n\t") + "\n")
+                    #malloc, memcpy, MyKernel, itd
                 self.file.writelines('\n')
 
 
-        # int** A = new int*[rows];
-        # self.file.writelines("\t" + self.declaration_variable_with_value(
-        #     typesVariables[2], variables[14],
-        #     self.creating_one_dimensional_array('new', typesVariables[1], variables[11])) + ";\n")
-
-        # A[0] = new int[rows * cols];
-        # self.file.writelines("  " + self.creating_one_dimensional_array(
-        #     '', variables[14], 0) + "=" + self.creating_one_dimensional_array('new', typesVariables[0],
-        #                                                                       'rows*cols') + ";\n")
-
-
-        # for (int i = 1; i < rows; ++i) { A[i] = A[i-1] + cols; };
-        # self.file.writelines("\n\t" + self.building_for('int i', self.lt_or_gt(1, 10), 1, 1, variables[11],
-        #                                                 self.creating_one_dimensional_array(
-        #                                                     '', variables[14],
-        #                                                     'i') + "=" + self.creating_one_dimensional_array('',
-        #                                                                                                    variables[
-        #                                                                                                        14],
-        #                                                                                                    'i-1') + " + cols;\n\t") + "\n")
-
-        for instr in self.phrase.instructions:
-            if isinstance(instr, Constructions):
-                for instr2 in instr.Constr.instructions:
-                    if isinstance(instr2, Constructions):
-                        for instr3 in instr2.Constr.instructions:
-                            if isinstance(instr3, Constructions):
-                                for instr4 in instr3.Constr.instructions:
-                                    if isinstance(instr4, Constructions):
-                                        pass
-                                    else:
-                                        self.file.writelines(
-                                            self.building_for(
-                                                instr.Constr.init['name'],
-                                                self.lt_or_gt(
-                                                    instr.Constr.init['value'],
-                                                    eval(instr.Constr.end_condition['value'])
-                                                ),
-                                                instr.Constr.init['value'],
-                                                instr.Constr.increment['inc'],
-                                                instr.Constr.end_condition['value'],
-                                                self.building_for(
-                                                    instr2.Constr.init['name'],
-                                                    self.lt_or_gt(
-                                                        instr2.Constr.init['value'],
-                                                        eval(instr2.Constr.end_condition['value'])
-                                                    ),
-                                                    instr2.Constr.init['value'],
-                                                    instr2.Constr.increment['inc'],
-                                                    instr2.Constr.end_condition['value'],
-                                                    self.building_for(
-                                                        instr3.Constr.init['name'],
-                                                        self.lt_or_gt(
-                                                            instr3.Constr.init['value'],
-                                                            eval(instr3.Constr.end_condition['value'])
-                                                        ),
-                                                        instr3.Constr.init['value'],
-                                                        instr3.Constr.increment['inc'],
-                                                        instr3.Constr.end_condition['value'],
-                                                        self.creating_two_dimensional_array(
-                                                            '',
-                                                            instr4['var'],
-                                                            'i',
-                                                            'j'
-                                                        ) + "=" + instr4['val'] + ";\n\t"
-                                                    )
-                                                )
-                                            )
-                                        )
-                            else:
-                                self.file.writelines(
-                                    self.building_for(
-                                        instr.Constr.init['name'],
-                                        self.lt_or_gt(
-                                            instr.Constr.init['value'],
-                                            eval(instr.Constr.end_condition['value'])
-                                        ),
-                                        instr.Constr.init['value'],
-                                        instr.Constr.increment['inc'],
-                                        instr.Constr.end_condition['value'],
-                                        self.building_for(
-                                            instr2.Constr.init['name'],
-                                            self.lt_or_gt(
-                                                instr2.Constr.init['value'],
-                                                eval(instr2.Constr.end_condition['value'])
-                                            ),
-                                            instr2.Constr.init['value'],
-                                            instr2.Constr.increment['inc'],
-                                            instr2.Constr.end_condition['value'],
-                                            self.creating_two_dimensional_array(
-                                                '',
-                                                instr3['var'],
-                                                'i',
-                                                'j'
-                                            ) + "=" + instr3['val'] + ";\n\t"
-                                        )
-                                    )
-                                )
+        # for instr in self.phrase.instructions:
+        #     if isinstance(instr, Constructions):
+        #         for instr2 in instr.Constr.instructions:
+        #             if isinstance(instr2, Constructions):
+        #                 for instr3 in instr2.Constr.instructions:
+        #                     if isinstance(instr3, Constructions):
+        #                         for instr4 in instr3.Constr.instructions:
+        #                             if isinstance(instr4, Constructions):
+        #                                 pass
+        #                             else:
+        #                                 self.file.writelines(
+        #                                     self.building_for(
+        #                                         instr.Constr.init['name'],
+        #                                         self.lt_or_gt(
+        #                                             instr.Constr.init['value'],
+        #                                             eval(instr.Constr.end_condition['value'])
+        #                                         ),
+        #                                         instr.Constr.init['value'],
+        #                                         instr.Constr.increment['inc'],
+        #                                         instr.Constr.end_condition['value'],
+        #                                         self.building_for(
+        #                                             instr2.Constr.init['name'],
+        #                                             self.lt_or_gt(
+        #                                                 instr2.Constr.init['value'],
+        #                                                 eval(instr2.Constr.end_condition['value'])
+        #                                             ),
+        #                                             instr2.Constr.init['value'],
+        #                                             instr2.Constr.increment['inc'],
+        #                                             instr2.Constr.end_condition['value'],
+        #                                             self.building_for(
+        #                                                 instr3.Constr.init['name'],
+        #                                                 self.lt_or_gt(
+        #                                                     instr3.Constr.init['value'],
+        #                                                     eval(instr3.Constr.end_condition['value'])
+        #                                                 ),
+        #                                                 instr3.Constr.init['value'],
+        #                                                 instr3.Constr.increment['inc'],
+        #                                                 instr3.Constr.end_condition['value'],
+        #                                                 self.creating_two_dimensional_array(
+        #                                                     '',
+        #                                                     instr4['var'],
+        #                                                     'i',
+        #                                                     'j'
+        #                                                 ) + "=" + instr4['val'] + ";\n\t"
+        #                                             )
+        #                                         )
+        #                                     )
+        #                                 )
+        #                     else:
+        #                         self.file.writelines(
+        #                             self.building_for(
+        #                                 instr.Constr.init['name'],
+        #                                 self.lt_or_gt(
+        #                                     instr.Constr.init['value'],
+        #                                     eval(instr.Constr.end_condition['value'])
+        #                                 ),
+        #                                 instr.Constr.init['value'],
+        #                                 instr.Constr.increment['inc'],
+        #                                 instr.Constr.end_condition['value'],
+        #                                 self.building_for(
+        #                                     instr2.Constr.init['name'],
+        #                                     self.lt_or_gt(
+        #                                         instr2.Constr.init['value'],
+        #                                         eval(instr2.Constr.end_condition['value'])
+        #                                     ),
+        #                                     instr2.Constr.init['value'],
+        #                                     instr2.Constr.increment['inc'],
+        #                                     instr2.Constr.end_condition['value'],
+        #                                     self.creating_two_dimensional_array(
+        #                                         '',
+        #                                         instr3['var'],
+        #                                         'i',
+        #                                         'j'
+        #                                     ) + "=" + instr3['val'] + ";\n\t"
+        #                                 )
+        #                             )
+        #                         )
         self.building_cuda()
 
     def building_cuda(self):
+        # malloc
         mainCudaFunc1 = "\t{0}(({1} **)&{2}, sizeof(int) * {3}* {4});\n".format(
-            functions[2], keyWords[4], variables[13], variables[11], variables[12])
+            functions[2], keyWords[4], variables[15], variables[18], variables[20])
+        self.file.writelines(mainCudaFunc1)
+        mainCudaFunc1 = "\t{0}(({1} **)&{2}, sizeof(int) * {3}* {4});\n".format(
+            functions[2], keyWords[4], variables[16], variables[18], variables[20])
+        self.file.writelines(mainCudaFunc1)
+        mainCudaFunc1 = "\t{0}(({1} **)&{2}, sizeof(int) * {3}* {4});\n\n".format(
+            functions[2], keyWords[4], variables[17], variables[18], variables[21])
         self.file.writelines(mainCudaFunc1)
 
-        mainCudaFunc2 = "\t{0}({1}, {2}[0], {3}({4}) * {5} * {6}, {7});\n\n".format(functions[3], variables[13],
-                                                                                   variables[14], keyWords[5],
-                                                                                   typesVariables[0], variables[11],
-                                                                                   variables[12], functions[4])
+        mainCudaFunc2 = "\t{0}({1}, {2}[0], {3}({4}) * {5} * {6}, {7});\n".format(functions[3], variables[15], variables[22], keyWords[5],
+                                                                                   typesVariables[0], variables[18],
+                                                                                   variables[20], functions[4])
+        self.file.writelines(mainCudaFunc2)
+        mainCudaFunc2 = "\t{0}({1}, {2}[0], {3}({4}) * {5} * {6}, {7});\n".format(functions[3], variables[16], variables[23], keyWords[5],
+                                                                                   typesVariables[0], variables[19],
+                                                                                   variables[20], functions[4])
+        self.file.writelines(mainCudaFunc2)
+        mainCudaFunc2 = "\t{0}({1}, {2}[0], {3}({4}) * {5} * {6}, {7});\n\n".format(functions[3], variables[17], variables[24], keyWords[5],
+                                                                                   typesVariables[0], variables[18],
+                                                                                   variables[19], functions[4])
         self.file.writelines(mainCudaFunc2)
 
-        mainCudaFunc3 = "\t{0}<<<{1},{1}>>>({2});\n\n".format(
-            functions[0], variables[0], variables[13])
+        mainCudaFunc3 = "\t{0}<<<{1},{2}>>>({3},{4},{5});\n\n".format(
+            functions[0], variables[21], variables[20], variables[15], variables[16], variables[17])
         self.file.writelines(mainCudaFunc3)
 
-        mainCudaFunc4 = "\t{0}({2}[0], {1}, {3}({4}) * {5} * {6}, {7});\n".format(functions[3], variables[13],
-                                                                                     variables[14], keyWords[5],
-                                                                                     typesVariables[0], variables[11],
-                                                                                     variables[12], functions[5])
+        mainCudaFunc4 = "\t{0}({2}[0], {1}, {3}({4}) * {5} * {6}, {7});\n".format(functions[3], variables[17],
+                                                                                     variables[24], keyWords[5],
+                                                                                     typesVariables[0], variables[18],
+                                                                                     variables[19], functions[5])
         self.file.writelines(mainCudaFunc4)
 
         # free memory
-        self.file.writelines("\n\tdelete A[0];\n\tdelete A;\n\tcudaFree(dA);\n}")
+        self.file.writelines("\n\tdelete a[0];\n\tdelete a;\n\tcudaFree(dA);\n")
+        self.file.writelines("\n\tdelete b[0];\n\tdelete b;\n\tcudaFree(dB);\n")
+        self.file.writelines("\n\tdelete mult[0];\n\tdelete mult;\n\tcudaFree(dMult);\n}")
 
     def building_headers(self):
 

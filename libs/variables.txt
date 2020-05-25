@@ -13,3 +13,13 @@ rows
 cols
 dA
 A
+dA
+dB
+dMult
+r1
+r2
+c1
+c2
+a
+b
+mult
